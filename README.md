@@ -1,57 +1,100 @@
-# CIx: The Contextual Integrity Index (CIx): A Dual-Axis, Physics-Inspired Framework for LLM Hallucination Measurement
+# 🛡️ The Contextual Integrity Index ($\mathbf{CIx}$): A Dual-Axis, Diagnostic Framework for LLM Hallucination
 
-The Contextual Integrity Index (\boldsymbol{CIx})
-The Contextual Integrity Index (\boldsymbol{CIx}) is a novel, dual-axis metric designed to provide a precise, diagnostic measure of Large Language Model (LLM) output reliability, specifically targeting the phenomenon of hallucination.
-Moving beyond traditional single-aggregate metrics, the \boldsymbol{CIx} framework analyzes the consistency and positional volatility of factual claims using principles derived from electrical engineering (Power Quality Analysis) and signal processing (Fast Fourier Transform).
-1. Core Framework Components
-The \boldsymbol{CIx} is defined as a vector in the Complex Hallucination Plane: \boldsymbol{CIx} = (\boldsymbol{HM}_{\text{ERR}}, \boldsymbol{HM}_{\text{FFT}}).
-The entire framework relies on a pre-computed or internally-derived token-level Grounding Confidence Signal (C_t \in [0, 1]) across the LLM's output.
-1.1. X-Axis: Systemic Error Rate (\boldsymbol{HM}_{\text{ERR}})
-This component quantifies the aggregate proportion of ungrounded content within the output.
-Analogy: Analogous to the ratio of Reactive Power (Q, Hallucination) to Apparent Power (S, Total Generative Capacity) in Power Quality analysis.
-Purpose: Measures the total amount of error or unsupported generative effort.
-1.2. Y-Axis: Structural Volatility (\boldsymbol{HM}_{\text{FFT}})
-This component measures the structural stability of the confidence signal by analyzing its frequency components.
-Method: Uses the Fast Fourier Transform (FFT) of the confidence signal (C_t).
-Purpose: Captures the frequency and severity of integrity shifts—i.e., how often and how severely the model switches between grounded and ungrounded claims. This detects highly erratic outputs that might be low in total error but unusable due to rapid back-and-forth claims.
-2. The \boldsymbol{CIx} Diagnostic Plane
-By plotting \boldsymbol{HM}_{\text{ERR}} (Systemic Error) against \boldsymbol{HM}_{\text{FFT}} (Structural Volatility), the \boldsymbol{CIx} enables the precise classification of LLM failure modes into four quadrants.
-Quadrant
-\boldsymbol{HM}_{\text{ERR}}
-\boldsymbol{HM}_{\text{FFT}}
-Failure Mode
-Description
-A
-Low
-Low
-Ideal Integrity
-Low overall error, highly consistent output.
-B
-Low
-High
-Erratic Failure
-Low total error, but extreme instability (frequent, rapid shifts in integrity).
-C
-High
-Low
-Passive Failure
-High total error, but errors are consistently distributed (e.g., confidently wrong on a single, long claim).
-D
-High
-High
-Chaotic Failure
-High overall error and extreme structural instability.
+## Project Overview
 
-3. Contextual Relevance Filter (\boldsymbol{R}-Score)
-The structural integrity assessment provided by \boldsymbol{CIx} must be constrained by the output's relevance to the user's original query.
-Method: The \boldsymbol{R}-Score is calculated using semantic vector similarity (e.g., cosine similarity of embedded prompt and output).
-Function: It acts as a critical, tertiary filter to prevent Contextual Drift. A high \boldsymbol{CIx} (structurally sound) paired with a low \boldsymbol{R}-Score (irrelevant) results in a flag or regeneration attempt.
-4. Application and Scope
-Due to the computational overhead associated with generating the token-level confidence signal (C_t) and performing the subsequent vector analysis, the \boldsymbol{CIx} framework is positioned as a safety-critical extension for high-stakes domains where the cost of hallucination outweighs the cost of computation:
-Healthcare (diagnosis support)
-Legal/Compliance (regulatory summarization)
-Finance (algorithmic trading logic)
-The \boldsymbol{CIx} is intended to be implemented as a post-hoc diagnostic safety check that triggers guardrails (regeneration, formal warnings) based on defined, domain-specific thresholds for both the \boldsymbol{CIx} vector and the \boldsymbol{R}-Score.
+The **Contextual Integrity Index ($\mathbf{CIx}$)** is a novel, physics-inspired, dual-axis metric designed to provide a precise, diagnostic measure of Large Language Model (LLM) reliability and hallucination.
 
-Collaboration
-This work is presented as an open-access contribution. We formally invite researchers, engineers, and organizations to collaborate in the empirical validation, thresholding, and advanced implementation of the \boldsymbol{CIx} to advance the field of LLM integrity measurement.
+Unlike simple aggregate scores, the $\mathbf{CIx}$ framework assesses both the **quantity** and the **structural consistency** of ungrounded content, moving beyond "is it right?" to "is it *consistently* right and *contextually* relevant?"
+
+**Note:** Due to the computational overhead of the multi-step analysis ($\mathbf{C_t}$ generation, FFT, R-Score), the $\mathbf{CIx}$ is positioned as a **safety-critical extension for high-stakes domains** (e.g., Healthcare, Legal, Finance).
+
+---
+
+## 🛠️ Core Framework Components
+
+The $\mathbf{CIx}$ is a vector $\mathbf{CIx} = (\mathbf{HM}_{\text{ERR}}, \mathbf{HM}_{\text{FFT}})$ calculated from a normalized, token-level **Grounding Confidence Signal ($\mathbf{C_t} \in [0, 1]$)**.
+
+### 1. X-Axis: Systemic Error Rate ($\mathbf{HM}_{\text{ERR}}$)
+
+This component measures the **aggregate proportion** of ungrounded content. It is derived from an analogy to AC Power Quality analysis, where:
+
+$$
+\mathbf{HM}_{\text{ERR}} = \frac{Q}{S} = \frac{\text{Reactive Power (Hallucination)}}{\text{Apparent Power (Total Generative Capacity)}}
+$$
+
+* **P (Grounded Truth):** Content with High $\mathbf{C_t}$.
+* **Q (Hallucination):** Content with Low $\mathbf{C_t}$.
+* **S (Total):** $P + Q$.
+
+### 2. Y-Axis: Structural Volatility ($\mathbf{HM}_{\text{FFT}}$)
+
+This component measures the **consistency and structural stability** of the confidence signal using the **Fast Fourier Transform (FFT)**. It quantifies the frequency and severity of positional integrity shifts.
+
+$$
+\mathbf{HM}_{\text{FFT}} = \frac{E_{\text{AC}}}{E_{\text{DC}} + E_{\text{AC}}}
+$$
+
+* **$E_{\text{DC}}$:** DC energy (Aggregate, steady confidence).
+* **$E_{\text{AC}}$:** AC energy (Volatility, representing structural instability).
+
+### 3. Tertiary Filter: Contextual Relevance ($\mathbf{R}$-Score)
+
+The $\mathbf{R}$-Score is a critical gate that ensures the output is relevant to the input query.
+
+* **Metric:** Cosine Similarity between the embedded input prompt and the embedded final output text.
+* **Function:** Filters out **Contextual Drift**—outputs that are structurally sound ($\mathbf{CIx}$ is low) but irrelevant to the user's intent (e.g., $\mathbf{R} < 0.75$).
+
+---
+
+## 📈 The $\mathbf{CIx}$ Diagnostic Plane
+
+The combination of the two orthogonal metrics allows for the classification of LLM failure modes in a 2D plane. A perfect output state is the origin **(0, 0)**.
+
+
+
+| Quadrant | $\mathbf{HM}_{\text{ERR}}$ (Error) | $\mathbf{HM}_{\text{FFT}}$ (Volatility) | Failure Description |
+| :--- | :---: | :---: | :--- |
+| **Ideal Integrity** | Low | Low | Low error rate, high structural consistency. |
+| **Passive Failure** | **High** | Low | High error rate, but errors are consistently distributed (e.g., confidently wrong). |
+| **Erratic Failure** | Low | **High** | Low overall error, but extreme instability (frequent, rapid switching between grounded/ungrounded claims). |
+| **Chaotic Failure** | **High** | **High** | High overall error rate and extreme structural instability. |
+
+---
+
+## 🚀 Usage and Implementation Guide
+
+The $\mathbf{CIx}$ translates directly into actionable guardrails for safety-critical LLM deployment.
+
+### Prerequisites
+
+* **Token-level Grounding Confidence Signal ($\mathbf{C_t}$):** Must be generated by an external fact-checker or a robust internal uncertainty model (e.g., utilizing $\mathbf{k}$-nearest neighbors or self-evaluation). **The $\mathbf{C_t}$ signal is a prerequisite for this framework.**
+
+### Guardrail Logic (Conceptual Thresholds)
+
+1.  **Contextual Drift Filter ($\mathbf{R}$-Score):**
+    * **If $\mathbf{R} < 0.75$:** Trigger response regeneration. If regeneration fails, append a formal warning to the output: "Warning: The final answer trends to get away from your original input requirements."
+2.  **Structural and Systemic Integrity Filter ($\mathbf{CIx}$):**
+    * **If $\mathbf{HM}_{\text{ERR}} > 0.25$** **OR** **$\mathbf{HM}_{\text{FFT}} > 0.25$**: The LLM output is flagged with a high-severity warning (e.g., "Warning: This output contains structural instability and should not be used for patient care.").
+
+### Example: Chaotic Failure Mode in a High-Stakes Domain
+
+**Session $\mathbf{CIx} \approx (0.75, 0.80)$ (High Error, High Volatility)**
+
+This diagnosis indicates an output that is both predominantly ungrounded AND structurally unstable, such as: "The diagnosis could be **Dengue Fever**, [High $\mathbf{C_t}$]... However, the symptoms are also consistent with **Hepatitis Z-14, a new virus endemic only to Iceland** [Low $\mathbf{C_t}$]..."
+
+**Action:** Output is flagged with a critical warning, as deployment could lead to significant harm.
+
+---
+
+## 🤝 Open Collaboration and Citation
+
+We formally **invite researchers, engineers, and organizations** to collaborate in the empirical validation, thresholding, and advanced implementation of the $\mathbf{CIx}$ to advance the field of LLM integrity measurement.
+
+### Citation
+
+This framework is presented in the following correspondence:
+
+> Chaiya Tantisukarom. (2025). The Contextual Integrity Index ($\mathbf{CIx}$): A Dual-Axis, Physics-Inspired Framework for LLM Hallucination Measurement. (Pre-print/Correspondence)
+
+---
+*Assisted by Gemini, an AI large language model developed by Google, for drafting and refinement.*
